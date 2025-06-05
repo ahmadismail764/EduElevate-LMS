@@ -7,34 +7,34 @@ CREATE DATABASE edu_elevate;
 USE edu_elevate;
 
 -- Drop tables if they exist (in reverse order of dependencies)
-DROP TABLE IF EXISTS notifications;
+DROP TABLE IF EXISTS notification;
 
 DROP TABLE IF EXISTS attendance;
 
-DROP TABLE IF EXISTS quiz_attempts;
+DROP TABLE IF EXISTS quiz_attempt;
 
-DROP TABLE IF EXISTS assignment_submissions;
+DROP TABLE IF EXISTS assignment_submission;
 
-DROP TABLE IF EXISTS quiz_questions;
+DROP TABLE IF EXISTS quiz_question;
 
-DROP TABLE IF EXISTS assignments;
+DROP TABLE IF EXISTS assignment;
 
-DROP TABLE IF EXISTS quizzes;
+DROP TABLE IF EXISTS quiz;
 
-DROP TABLE IF EXISTS enrollments;
+DROP TABLE IF EXISTS enrollment;
 
-DROP TABLE IF EXISTS lessons;
+DROP TABLE IF EXISTS lesson;
 
-DROP TABLE IF EXISTS courses;
+DROP TABLE IF EXISTS course;
 
-DROP TABLE IF EXISTS instructors;
+DROP TABLE IF EXISTS instructor;
 
-DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS student;
 
--- Create Users table
+-- Create student table
 CREATE TABLE
-    users (
-        user_id INT AUTO_INCREMENT PRIMARY KEY,
+    student (
+        student_id INT AUTO_INCREMENT PRIMARY KEY,
         username VARCHAR(50) UNIQUE NOT NULL,
         email VARCHAR(100) UNIQUE NOT NULL,
         password VARCHAR(255) NOT NULL,
@@ -45,20 +45,20 @@ CREATE TABLE
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     );
 
--- Create Instructors table (extends users)
+-- Create instructor table (extends student)
 CREATE TABLE
-    instructors (
+    instructor (
         instructor_id INT AUTO_INCREMENT PRIMARY KEY,
-        user_id INT UNIQUE NOT NULL,
+        student_id INT UNIQUE NOT NULL,
         department VARCHAR(100),
         bio TEXT,
         specialization VARCHAR(100),
-        FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE
+        FOREIGN KEY (student_id) REFERENCES student (student_id) ON DELETE CASCADE
     );
 
--- Create Courses table
+-- Create course table
 CREATE TABLE
-    courses (
+    course (
         course_id INT AUTO_INCREMENT PRIMARY KEY,
         instructor_id INT NOT NULL,
         title VARCHAR(200) NOT NULL,
@@ -67,12 +67,12 @@ CREATE TABLE
         max_students INT DEFAULT 50,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-        FOREIGN KEY (instructor_id) REFERENCES instructors (instructor_id) ON DELETE CASCADE
+        FOREIGN KEY (instructor_id) REFERENCES instructor (instructor_id) ON DELETE CASCADE
     );
 
--- Create Lessons table
+-- Create lesson table
 CREATE TABLE
-    lessons (
+    lesson (
         lesson_id INT AUTO_INCREMENT PRIMARY KEY,
         course_id INT NOT NULL,
         title VARCHAR(200) NOT NULL,
@@ -81,25 +81,25 @@ CREATE TABLE
         otp VARCHAR(6),
         otp_expires_at TIMESTAMP NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (course_id) REFERENCES courses (course_id) ON DELETE CASCADE
+        FOREIGN KEY (course_id) REFERENCES course (course_id) ON DELETE CASCADE
     );
 
--- Create Enrollments table (Many-to-Many: Students to Courses)
+-- Create enrollment table (Many-to-Many: Students to course)
 CREATE TABLE
-    enrollments (
+    enrollment (
         enrollment_id INT AUTO_INCREMENT PRIMARY KEY,
-        user_id INT NOT NULL,
+        student_id INT NOT NULL,
         course_id INT NOT NULL,
         enrollment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         status ENUM ('ACTIVE', 'COMPLETED', 'DROPPED') DEFAULT 'ACTIVE',
-        FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE,
-        FOREIGN KEY (course_id) REFERENCES courses (course_id) ON DELETE CASCADE,
-        UNIQUE KEY unique_enrollment (user_id, course_id)
+        FOREIGN KEY (student_id) REFERENCES student (student_id) ON DELETE CASCADE,
+        FOREIGN KEY (course_id) REFERENCES course (course_id) ON DELETE CASCADE,
+        UNIQUE KEY unique_enrollment (student_id, course_id)
     );
 
--- Create Quizzes table (Course level)
+-- Create quiz table (Course level)
 CREATE TABLE
-    quizzes (
+    quiz (
         quiz_id INT AUTO_INCREMENT PRIMARY KEY,
         course_id INT NOT NULL,
         title VARCHAR(200) NOT NULL,
@@ -109,12 +109,12 @@ CREATE TABLE
         attempts_allowed INT DEFAULT 1,
         is_randomized BOOLEAN DEFAULT FALSE,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (course_id) REFERENCES courses (course_id) ON DELETE CASCADE
+        FOREIGN KEY (course_id) REFERENCES course (course_id) ON DELETE CASCADE
     );
 
 -- Create Quiz Questions table (Question bank per course)
 CREATE TABLE
-    quiz_questions (
+    quiz_question (
         question_id INT AUTO_INCREMENT PRIMARY KEY,
         quiz_id INT NOT NULL,
         question_text TEXT NOT NULL,
@@ -125,12 +125,12 @@ CREATE TABLE
         option_d VARCHAR(500),
         correct_answer VARCHAR(500) NOT NULL,
         marks INT DEFAULT 1,
-        FOREIGN KEY (quiz_id) REFERENCES quizzes (quiz_id) ON DELETE CASCADE
+        FOREIGN KEY (quiz_id) REFERENCES quiz (quiz_id) ON DELETE CASCADE
     );
 
--- Create Assignments table (Lesson level)
+-- Create assignment table (Lesson level)
 CREATE TABLE
-    assignments (
+    assignment (
         assignment_id INT AUTO_INCREMENT PRIMARY KEY,
         lesson_id INT NOT NULL,
         title VARCHAR(200) NOT NULL,
@@ -138,39 +138,39 @@ CREATE TABLE
         total_marks INT DEFAULT 100,
         due_date TIMESTAMP,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (lesson_id) REFERENCES lessons (lesson_id) ON DELETE CASCADE
+        FOREIGN KEY (lesson_id) REFERENCES lesson (lesson_id) ON DELETE CASCADE
     );
 
 -- Create Assignment Submissions table
 CREATE TABLE
-    assignment_submissions (
+    assignment_submission (
         submission_id INT AUTO_INCREMENT PRIMARY KEY,
         assignment_id INT NOT NULL,
-        user_id INT NOT NULL,
+        student_id INT NOT NULL,
         file_path VARCHAR(500),
         submission_text TEXT,
         submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         grade INT,
         feedback TEXT,
         graded_at TIMESTAMP NULL,
-        FOREIGN KEY (assignment_id) REFERENCES assignments (assignment_id) ON DELETE CASCADE,
-        FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE,
-        UNIQUE KEY unique_submission (assignment_id, user_id)
+        FOREIGN KEY (assignment_id) REFERENCES assignment (assignment_id) ON DELETE CASCADE,
+        FOREIGN KEY (student_id) REFERENCES student (student_id) ON DELETE CASCADE,
+        UNIQUE KEY unique_submission (assignment_id, student_id)
     );
 
 -- Create Quiz Attempts table
 CREATE TABLE
-    quiz_attempts (
+    quiz_attempt (
         attempt_id INT AUTO_INCREMENT PRIMARY KEY,
         quiz_id INT NOT NULL,
-        user_id INT NOT NULL,
+        student_id INT NOT NULL,
         score INT DEFAULT 0,
         total_questions INT,
         started_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         completed_at TIMESTAMP NULL,
         time_taken_minutes INT,
-        FOREIGN KEY (quiz_id) REFERENCES quizzes (quiz_id) ON DELETE CASCADE,
-        FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE
+        FOREIGN KEY (quiz_id) REFERENCES quiz (quiz_id) ON DELETE CASCADE,
+        FOREIGN KEY (student_id) REFERENCES student (student_id) ON DELETE CASCADE
     );
 
 -- Create Attendance table
@@ -178,20 +178,20 @@ CREATE TABLE
     attendance (
         attendance_id INT AUTO_INCREMENT PRIMARY KEY,
         lesson_id INT NOT NULL,
-        user_id INT NOT NULL,
+        student_id INT NOT NULL,
         otp_entered VARCHAR(6),
         attended BOOLEAN DEFAULT FALSE,
         attended_at TIMESTAMP NULL,
-        FOREIGN KEY (lesson_id) REFERENCES lessons (lesson_id) ON DELETE CASCADE,
-        FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE,
-        UNIQUE KEY unique_attendance (lesson_id, user_id)
+        FOREIGN KEY (lesson_id) REFERENCES lesson (lesson_id) ON DELETE CASCADE,
+        FOREIGN KEY (student_id) REFERENCES student (student_id) ON DELETE CASCADE,
+        UNIQUE KEY unique_attendance (lesson_id, student_id)
     );
 
--- Create Notifications table
+-- Create notification table
 CREATE TABLE
-    notifications (
+    notification (
         notification_id INT AUTO_INCREMENT PRIMARY KEY,
-        user_id INT NOT NULL,
+        student_id INT NOT NULL,
         course_id INT,
         type ENUM (
             'ENROLLMENT',
@@ -204,30 +204,30 @@ CREATE TABLE
         message TEXT NOT NULL,
         is_read BOOLEAN DEFAULT FALSE,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE,
-        FOREIGN KEY (course_id) REFERENCES courses (course_id) ON DELETE SET NULL
+        FOREIGN KEY (student_id) REFERENCES student (student_id) ON DELETE CASCADE,
+        FOREIGN KEY (course_id) REFERENCES course (course_id) ON DELETE SET NULL
     );
 
 -- Create indexes for better performance
-CREATE INDEX idx_users_email ON users (email);
+CREATE INDEX idx_student_email ON student (email);
 
-CREATE INDEX idx_users_role ON users (role);
+CREATE INDEX idx_student_role ON student (role);
 
-CREATE INDEX idx_courses_instructor ON courses (instructor_id);
+CREATE INDEX idx_course_instructor ON course (instructor_id);
 
-CREATE INDEX idx_lessons_course ON lessons (course_id);
+CREATE INDEX idx_lesson_course ON lesson (course_id);
 
-CREATE INDEX idx_enrollments_user ON enrollments (user_id);
+CREATE INDEX idx_enrollment_user ON enrollment (student_id);
 
-CREATE INDEX idx_enrollments_course ON enrollments (course_id);
+CREATE INDEX idx_enrollment_course ON enrollment (course_id);
 
-CREATE INDEX idx_notifications_user ON notifications (user_id);
+CREATE INDEX idx_notification_user ON notification (student_id);
 
-CREATE INDEX idx_notifications_unread ON notifications (user_id, is_read);
+CREATE INDEX idx_notification_unread ON notification (student_id, is_read);
 
 CREATE INDEX idx_attendance_lesson ON attendance (lesson_id);
 
-CREATE INDEX idx_quiz_attempts_user ON quiz_attempts (user_id);
+CREATE INDEX idx_quiz_attempt_user ON quiz_attempt (student_id);
 
 COMMIT;
 
