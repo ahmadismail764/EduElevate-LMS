@@ -1,5 +1,4 @@
 package com.eduelevate.lms.dto;
-import com.eduelevate.lms.entity.Role;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
@@ -13,5 +12,4 @@ public class CreateStudentDto {
     private String password;
     private String firstName;
     private String lastName;
-    private Role role;
 }

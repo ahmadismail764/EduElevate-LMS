@@ -1,8 +1,6 @@
 package com.eduelevate.lms.entity;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.EnumType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
@@ -28,13 +26,8 @@ public class Student {
     private String password;
 
     @Column(name = "first_name")
-    private String firstName;
-
-    @Column(name = "last_name")
+    private String firstName;    @Column(name = "last_name")
     private String lastName;
-      @Enumerated(EnumType.STRING)
-    @Column(name = "role")
-    private Role role;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;

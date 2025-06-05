@@ -2,7 +2,6 @@ package com.eduelevate.lms.service;
 import com.eduelevate.lms.dto.StudentResponseDto;
 import com.eduelevate.lms.dto.CreateStudentDto;
 import com.eduelevate.lms.dto.UpdateStudentDto;
-import com.eduelevate.lms.entity.Role;
 import java.util.List;
 
 public interface StudentService {
@@ -12,9 +11,7 @@ public interface StudentService {
     StudentResponseDto createStudent(CreateStudentDto createDto);
     StudentResponseDto updateStudent(int studentId, UpdateStudentDto updateDto);
     void deleteStudent(int studentId);
-    
-    // Custom Query Methods
+      // Custom Query Methods
     StudentResponseDto getStudentByEmail(String email);
-    List<StudentResponseDto> getStudentsByRole(Role role);
     boolean existsByEmail(String email);
 }

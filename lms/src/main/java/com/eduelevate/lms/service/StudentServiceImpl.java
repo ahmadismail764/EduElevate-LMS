@@ -3,7 +3,6 @@ import com.eduelevate.lms.dto.StudentResponseDto;
 import com.eduelevate.lms.dto.CreateStudentDto;
 import com.eduelevate.lms.dto.UpdateStudentDto;
 import com.eduelevate.lms.entity.Student;
-import com.eduelevate.lms.entity.Role;
 import com.eduelevate.lms.repository.StudentRepository;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
@@ -56,11 +55,9 @@ public class StudentServiceImpl implements StudentService {
     public StudentResponseDto updateStudent(int studentId, UpdateStudentDto updateDto) {
         Student existingStudent = studentRepository.findById(studentId)
                 .orElseThrow(() -> new RuntimeException("Student not found with id: " + studentId));
-        
-        // Update only the fields that can be updated
+          // Update only the fields that can be updated
         existingStudent.setFirstName(updateDto.getFirstName());
         existingStudent.setLastName(updateDto.getLastName());
-        existingStudent.setRole(updateDto.getRole());
         existingStudent.setUpdatedAt(LocalDateTime.now());
         
         Student updatedStudent = studentRepository.save(existingStudent);
@@ -79,16 +76,7 @@ public class StudentServiceImpl implements StudentService {
     public StudentResponseDto getStudentByEmail(String email) {
         Student student = studentRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Student not found with email: " + email));
-        return convertToResponseDto(student);
-    }
-    
-    @Override
-    public List<StudentResponseDto> getStudentsByRole(Role role) {
-        return studentRepository.findByRole(role)
-                .stream()
-                .map(this::convertToResponseDto)
-                .collect(Collectors.toList());
-    }
+        return convertToResponseDto(student);    }
     
     @Override
     public boolean existsByEmail(String email) {
@@ -99,11 +87,9 @@ public class StudentServiceImpl implements StudentService {
     private StudentResponseDto convertToResponseDto(Student student) {
         return new StudentResponseDto(
                 student.getStudentId(),
-                student.getUsername(),
-                student.getFirstName(),
+                student.getUsername(),                student.getFirstName(),
                 student.getLastName(),
-                student.getEmail(),
-                student.getRole()
+                student.getEmail()
         );
     }
     
