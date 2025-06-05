@@ -29,12 +29,27 @@ DROP TABLE IF EXISTS course;
 
 DROP TABLE IF EXISTS instructor;
 
+DROP TABLE IF EXISTS admin;
+
 DROP TABLE IF EXISTS student;
 
 -- Create student table
 CREATE TABLE
     student (
         student_id INT AUTO_INCREMENT PRIMARY KEY,
+        username VARCHAR(50) UNIQUE NOT NULL,
+        email VARCHAR(100) UNIQUE NOT NULL,
+        password VARCHAR(255) NOT NULL,
+        first_name VARCHAR(50) NOT NULL,
+        last_name VARCHAR(50) NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    );
+
+-- Create admin table
+CREATE TABLE
+    admin (
+        admin_id INT AUTO_INCREMENT PRIMARY KEY,
         username VARCHAR(50) UNIQUE NOT NULL,
         email VARCHAR(100) UNIQUE NOT NULL,
         password VARCHAR(255) NOT NULL,
@@ -209,6 +224,8 @@ CREATE TABLE
 
 -- Create indexes for better performance
 CREATE INDEX idx_student_email ON student (email);
+
+CREATE INDEX idx_admin_email ON admin (email);
 
 CREATE INDEX idx_course_instructor ON course (instructor_id);
 
