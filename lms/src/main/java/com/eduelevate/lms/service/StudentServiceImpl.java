@@ -52,10 +52,10 @@ public class StudentServiceImpl implements StudentService {
     }
     
     @Override
-    public StudentResponseDto updateStudent(int studentId, UpdateStudentDto updateDto) {
-        Student existingStudent = studentRepository.findById(studentId)
+    public StudentResponseDto updateStudent(int studentId, UpdateStudentDto updateDto) {        Student existingStudent = studentRepository.findById(studentId)
                 .orElseThrow(() -> new RuntimeException("Student not found with id: " + studentId));
-          // Update only the fields that can be updated
+        
+        // Update only the fields that can be updated
         existingStudent.setFirstName(updateDto.getFirstName());
         existingStudent.setLastName(updateDto.getLastName());
         existingStudent.setUpdatedAt(LocalDateTime.now());
@@ -76,7 +76,8 @@ public class StudentServiceImpl implements StudentService {
     public StudentResponseDto getStudentByEmail(String email) {
         Student student = studentRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Student not found with email: " + email));
-        return convertToResponseDto(student);    }
+        return convertToResponseDto(student);
+    }
     
     @Override
     public boolean existsByEmail(String email) {
@@ -87,20 +88,22 @@ public class StudentServiceImpl implements StudentService {
     private StudentResponseDto convertToResponseDto(Student student) {
         return new StudentResponseDto(
                 student.getStudentId(),
-                student.getUsername(),                student.getFirstName(),
+                student.getUsername(),
+                student.getFirstName(),
                 student.getLastName(),
-                student.getEmail()
-        );
+                student.getEmail()        );
     }
     
     private Student convertToEntity(CreateStudentDto createDto) {
         return new Student(
+                0, // studentId will be auto-generated
                 createDto.getUsername(),
                 createDto.getEmail(),
                 createDto.getPassword(),
                 createDto.getFirstName(),
                 createDto.getLastName(),
-                createDto.getRole()
+                null, // createdAt will be set in service
+                null  // updatedAt will be set in service
         );
     }
 }

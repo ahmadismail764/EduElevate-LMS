@@ -3,7 +3,6 @@ package com.eduelevate.lms.controller;
 import com.eduelevate.lms.dto.StudentResponseDto;
 import com.eduelevate.lms.dto.CreateStudentDto;
 import com.eduelevate.lms.dto.UpdateStudentDto;
-import com.eduelevate.lms.entity.Role;
 import com.eduelevate.lms.service.StudentService;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -40,17 +39,11 @@ public class StudentController {
     
     @DeleteMapping("/{id}")
     public void deleteStudent(@PathVariable int id) {
-        studentService.deleteStudent(id);
-    }
+        studentService.deleteStudent(id);    }
     
     @GetMapping("/email/{email}")
     public StudentResponseDto getStudentByEmail(@PathVariable String email) {
         return studentService.getStudentByEmail(email);
-    }
-    
-    @GetMapping("/role/{role}")
-    public List<StudentResponseDto> getStudentsByRole(@PathVariable Role role) {
-        return studentService.getStudentsByRole(role);
     }
     
     @GetMapping("/exists/{email}")

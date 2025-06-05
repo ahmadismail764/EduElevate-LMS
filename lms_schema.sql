@@ -40,7 +40,6 @@ CREATE TABLE
         password VARCHAR(255) NOT NULL,
         first_name VARCHAR(50) NOT NULL,
         last_name VARCHAR(50) NOT NULL,
-        role ENUM ('ADMIN', 'INSTRUCTOR', 'STUDENT') NOT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     );
@@ -210,8 +209,6 @@ CREATE TABLE
 
 -- Create indexes for better performance
 CREATE INDEX idx_student_email ON student (email);
-
-CREATE INDEX idx_student_role ON student (role);
 
 CREATE INDEX idx_course_instructor ON course (instructor_id);
 

@@ -39,7 +39,7 @@ This document tracks the progress of building the Learning Management System (LM
 - Create Instructor entity (similar to Admin).
 - Implement basic authentication:
   - Login/logout.
-  - Role-based access.
+  - Entity-based access control.
 
 ### Module 2: Course Management System
 
