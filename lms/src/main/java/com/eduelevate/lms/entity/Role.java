@@ -1,4 +1,4 @@
-pacakge com.eduelevate.lms.entity;
+package com.eduelevate.lms.entity;
 
 public enum Role {
     ADMIN,
