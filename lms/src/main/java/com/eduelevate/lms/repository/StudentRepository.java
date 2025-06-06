@@ -27,8 +27,8 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
      * COUNT/CHECK OPERATIONS:
      * - count() - Count total students     * - existsById(Integer id) - Check if student exists
      */
-    
-    // Custom Query Methods
+      // Custom Query Methods
     Optional<Student> findByEmail(String email);
     boolean existsByEmail(String email);
+    boolean existsByUsername(String username);
 }

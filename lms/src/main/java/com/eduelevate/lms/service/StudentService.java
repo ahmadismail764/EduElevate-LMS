@@ -11,7 +11,4 @@ public interface StudentService {
     StudentResponseDto createStudent(CreateStudentDto createDto);
     StudentResponseDto updateStudent(int studentId, UpdateStudentDto updateDto);
     void deleteStudent(int studentId);
-      // Custom Query Methods
-    StudentResponseDto getStudentByEmail(String email);
-    boolean existsByEmail(String email);
 }

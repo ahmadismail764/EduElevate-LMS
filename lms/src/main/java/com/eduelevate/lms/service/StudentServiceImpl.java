@@ -50,14 +50,37 @@ public class StudentServiceImpl implements StudentService {
         Student savedStudent = studentRepository.save(student);
         return convertToResponseDto(savedStudent);
     }
-    
-    @Override
+      @Override
     public StudentResponseDto updateStudent(int studentId, UpdateStudentDto updateDto) {        Student existingStudent = studentRepository.findById(studentId)
                 .orElseThrow(() -> new RuntimeException("Student not found with id: " + studentId));
         
-        // Update only the fields that can be updated
-        existingStudent.setFirstName(updateDto.getFirstName());
-        existingStudent.setLastName(updateDto.getLastName());
+        // Check if email is being updated and if it already exists for another student
+        if (updateDto.getEmail() != null && !updateDto.getEmail().equals(existingStudent.getEmail())) {
+            if (studentRepository.existsByEmail(updateDto.getEmail())) {
+                throw new RuntimeException("Student with email " + updateDto.getEmail() + " already exists");
+            }
+        }
+        
+        // Check if username is being updated and if it already exists for another student
+        if (updateDto.getUsername() != null && !updateDto.getUsername().equals(existingStudent.getUsername())) {
+            if (studentRepository.existsByUsername(updateDto.getUsername())) {
+                throw new RuntimeException("Student with username " + updateDto.getUsername() + " already exists");
+            }
+        }
+        
+        // Update the fields that can be updated (only if not null)
+        if (updateDto.getUsername() != null) {
+            existingStudent.setUsername(updateDto.getUsername());
+        }
+        if (updateDto.getEmail() != null) {
+            existingStudent.setEmail(updateDto.getEmail());
+        }
+        if (updateDto.getFirstName() != null) {
+            existingStudent.setFirstName(updateDto.getFirstName());
+        }
+        if (updateDto.getLastName() != null) {
+            existingStudent.setLastName(updateDto.getLastName());
+        }
         existingStudent.setUpdatedAt(LocalDateTime.now());
         
         Student updatedStudent = studentRepository.save(existingStudent);
@@ -69,20 +92,7 @@ public class StudentServiceImpl implements StudentService {
         if (!studentRepository.existsById(studentId)) {
             throw new RuntimeException("Student not found with id: " + studentId);
         }
-        studentRepository.deleteById(studentId);
-    }
-    
-    @Override
-    public StudentResponseDto getStudentByEmail(String email) {
-        Student student = studentRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Student not found with email: " + email));
-        return convertToResponseDto(student);
-    }
-    
-    @Override
-    public boolean existsByEmail(String email) {
-        return studentRepository.existsByEmail(email);
-    }
+        studentRepository.deleteById(studentId);    }
     
     // Helper Methods for DTO Mapping
     private StudentResponseDto convertToResponseDto(Student student) {

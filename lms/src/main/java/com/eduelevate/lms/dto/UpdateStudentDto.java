@@ -7,7 +7,9 @@ import lombok.AllArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateStudentDto {
+    private String username;
+    private String email;
     private String firstName;
     private String lastName;
-    // Note: We typically don't allow updating username, email, or password via this DTO
+    // Note: Password updates should be handled separately for security reasons
 }

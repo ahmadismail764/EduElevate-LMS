@@ -17,37 +17,25 @@ public class StudentController {
         this.studentService = studentService;
     }
     
-    @GetMapping
+    @GetMapping // Tested and working 
     public List<StudentResponseDto> getAllStudents() {
         return studentService.getAllStudents();
     }
     
-    @GetMapping("/{id}")
+    @GetMapping("/{id}") // Tested and working
     public StudentResponseDto getStudentById(@PathVariable int id) {
         return studentService.getStudentById(id);
     }
     
-    @PostMapping
+    @PostMapping // Tested and working
     public StudentResponseDto createStudent(@RequestBody CreateStudentDto createDto) {
         return studentService.createStudent(createDto);
     }
-    
-    @PutMapping("/{id}")
+    @PutMapping("/{id}") // Tested and working
     public StudentResponseDto updateStudent(@PathVariable int id, @RequestBody UpdateStudentDto updateDto) {
         return studentService.updateStudent(id, updateDto);
     }
-    
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}") // Tested and working
     public void deleteStudent(@PathVariable int id) {
         studentService.deleteStudent(id);    }
-    
-    @GetMapping("/email/{email}")
-    public StudentResponseDto getStudentByEmail(@PathVariable String email) {
-        return studentService.getStudentByEmail(email);
-    }
-    
-    @GetMapping("/exists/{email}")
-    public boolean checkEmailExists(@PathVariable String email) {
-        return studentService.existsByEmail(email);
-    }
 }
