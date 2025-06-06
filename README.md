@@ -194,12 +194,6 @@ Enterprise-grade Learning Management System built with Spring Boot, following ve
 - MySQL 8.0+
 - IDE (IntelliJ IDEA/VS Code recommended)
 
-### Current Setup
-
-1. **Database**: MySQL database `edu_elevate` configured
-2. **Dependencies**: All Maven dependencies configured in pom.xml
-3. **Application Properties**: Database connection and basic configuration complete
-
 ### Running the Application
 
 ```bash
