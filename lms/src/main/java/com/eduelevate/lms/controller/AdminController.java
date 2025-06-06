@@ -1,8 +1,5 @@
 package com.eduelevate.lms.controller;
-
-import com.eduelevate.lms.dto.AdminResponseDto;
-import com.eduelevate.lms.dto.CreateAdminDto;
-import com.eduelevate.lms.dto.UpdateAdminDto;
+import com.eduelevate.lms.dto.admin.*;
 import com.eduelevate.lms.service.AdminService;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -22,7 +19,7 @@ public class AdminController {
         return adminService.getAllAdmins();
     }
     
-    @GetMapping("/{id}") // Tested and working
+    @GetMapping("/{id}") // Tested working
     public AdminResponseDto getAdminById(@PathVariable int id) {
         return adminService.getAdminById(id);
     }

@@ -1,8 +1,8 @@
 package com.eduelevate.lms.service;
 
-import com.eduelevate.lms.dto.AdminResponseDto;
-import com.eduelevate.lms.dto.CreateAdminDto;
-import com.eduelevate.lms.dto.UpdateAdminDto;
+import com.eduelevate.lms.dto.admin.AdminResponseDto;
+import com.eduelevate.lms.dto.admin.CreateAdminDto;
+import com.eduelevate.lms.dto.admin.UpdateAdminDto;
 import com.eduelevate.lms.entity.Admin;
 import com.eduelevate.lms.repository.AdminRepository;
 import org.springframework.stereotype.Service;

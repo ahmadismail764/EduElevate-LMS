@@ -1,7 +1,7 @@
 package com.eduelevate.lms.service;
-import com.eduelevate.lms.dto.StudentResponseDto;
-import com.eduelevate.lms.dto.CreateStudentDto;
-import com.eduelevate.lms.dto.UpdateStudentDto;
+import com.eduelevate.lms.dto.student.StudentResponseDto;
+import com.eduelevate.lms.dto.student.CreateStudentDto;
+import com.eduelevate.lms.dto.student.UpdateStudentDto;
 import java.util.List;
 
 public interface StudentService {
