@@ -182,6 +182,7 @@ Enterprise-grade Learning Management System built with Spring Boot, following ve
 - [ ] **Performance Tests**: Load testing and optimization
 - [ ] **Documentation**: Complete API and setup documentation
 
+## 📊 Overall Progress: `[█████░░░░░] 35%`
 ---
 
 ## 🚀 Getting Started
@@ -204,35 +205,6 @@ Enterprise-grade Learning Management System built with Spring Boot, following ve
 ```bash
 # Using Maven Wrapper (Windows)
 .\mvnw.cmd spring-boot:run
-
-# Using PowerShell
-.\mvnw.ps1 spring-boot:run
 ```
 
-### Testing Current Progress
 
-**Student API Endpoints** ✅ **All Working**:
-
-- GET `/api/students` - Get all students
-- GET `/api/students/{id}` - Get student by ID
-- POST `/api/students` - Create new student
-- PUT `/api/students/{id}` - Update student
-- DELETE `/api/students/{id}` - Delete student
-
-**Admin API Endpoints** ✅ **All Working**:
-
-- GET `/api/admins` - Get all admins
-- GET `/api/admins/{id}` - Get admin by ID
-- POST `/api/admins` - Create new admin
-- PUT `/api/admins/{id}` - Update admin
-- DELETE `/api/admins/{id}` - Delete admin
-
-## 📊 Overall Progress: `[█████░░░░░] 35%`
-
-**Latest Achievement**: Admin module completed with full CRUD operations tested ✅ Alhamdulillah!
-
-**Recent Improvements**:
-
-- ✅ DTO organization: Reorganized DTOs into entity-specific subdirectories (dto/student/, dto/admin/)
-- ✅ Complete vertical slicing: Student and Admin modules fully implemented and tested
-- ✅ Consistent patterns: Both modules follow identical architecture for maintainability
