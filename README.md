@@ -10,7 +10,7 @@ Enterprise-grade Learning Management System built with Spring Boot, following ve
 
 ## 📅 Module Progress Tracker
 
-### **Module 1: User Management System** `[██████░░░░] 67%`
+### **Module 1: User Management System** `[██████████] 100%` ✅ **COMPLETE**
 
 #### **🎓 Student Entity** `[██████████] 100%` ✅ **COMPLETE**
 
@@ -32,17 +32,17 @@ Enterprise-grade Learning Management System built with Spring Boot, following ve
 - [x] **DTOs**: AdminResponseDto, CreateAdminDto, UpdateAdminDto (organized in dto/admin/)
 - [x] **Testing**: All CRUD operations tested and working ✅
 
-#### **👨‍🏫 Instructor Entity** `[░░░░░░░░░░] 0%` 🔄 **NEXT UP**
+#### **👨‍🏫 Instructor Entity** `[██████████] 100%` ✅ **COMPLETE**
 
-- [ ] **Database Schema**: Create `instructor` table
-- [ ] **Entity Layer**: Instructor.java with JPA annotations and Lombok
-- [ ] **Repository Layer**: InstructorRepository with custom query methods
-- [ ] **Service Layer**: Interface + Implementation with business logic
-- [ ] **Controller Layer**: REST endpoints (GET, POST, PUT, DELETE)
-- [ ] **DTOs**: InstructorResponseDto, CreateInstructorDto, UpdateInstructorDto
-- [ ] **Testing**: Integration testing across all user types
+- [x] **Database Schema**: Instructor table created with proper structure
+- [x] **Entity Layer**: Instructor.java with JPA annotations and Lombok
+- [x] **Repository Layer**: InstructorRepository with custom query methods
+- [x] **Service Layer**: Interface + Implementation with business logic
+- [x] **Controller Layer**: REST endpoints (GET, POST, PUT, DELETE)
+- [x] **DTOs**: InstructorResponseDto, CreateInstructorDto, UpdateInstructorDto (organized in dto/instructor/)
+- [x] **Testing**: All CRUD operations tested and working ✅
 
-#### **🔐 Basic Authentication** `[░░░░░░░░░░] 0%`
+#### **🔐 Basic Authentication** `[░░░░░░░░░░] 0%` 🔄 **NEXT UP**
 
 - [ ] **Login Endpoint**: POST /api/auth/login with username/password
 - [ ] **Entity-based Access**: Protect endpoints based on user type
@@ -182,7 +182,8 @@ Enterprise-grade Learning Management System built with Spring Boot, following ve
 - [ ] **Performance Tests**: Load testing and optimization
 - [ ] **Documentation**: Complete API and setup documentation
 
-## 📊 Overall Progress: `[█████░░░░░] 35%`
+## 📊 Overall Progress: `[██████░░░░] 55%`
+
 ---
 
 ## 🚀 Getting Started
@@ -200,5 +201,3 @@ Enterprise-grade Learning Management System built with Spring Boot, following ve
 # Using Maven Wrapper (Windows)
 .\mvnw.cmd spring-boot:run
 ```
-
-
