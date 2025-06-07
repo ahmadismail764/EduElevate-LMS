@@ -7,6 +7,7 @@ import com.eduelevate.lms.entity.Instructor;
 import com.eduelevate.lms.repository.InstructorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 public class InstructorServiceImpl implements InstructorService {
     
     private final InstructorRepository instructorRepository;
+    private final PasswordEncoder passwordEncoder;
     
     @Override
     public InstructorResponseDto createInstructor(CreateInstructorDto createInstructorDto) {
@@ -106,12 +108,11 @@ public class InstructorServiceImpl implements InstructorService {
         }
         throw new RuntimeException("Instructor not found with email: " + email);
     }
-    
-    private Instructor mapToEntity(CreateInstructorDto createInstructorDto) {
+      private Instructor mapToEntity(CreateInstructorDto createInstructorDto) {
         Instructor instructor = new Instructor();
         instructor.setUsername(createInstructorDto.getUsername());
         instructor.setEmail(createInstructorDto.getEmail());
-        instructor.setPassword(createInstructorDto.getPassword());
+        instructor.setPassword(passwordEncoder.encode(createInstructorDto.getPassword()));
         instructor.setFirstName(createInstructorDto.getFirstName());
         instructor.setLastName(createInstructorDto.getLastName());
         instructor.setDepartment(createInstructorDto.getDepartment());
@@ -141,9 +142,8 @@ public class InstructorServiceImpl implements InstructorService {
         }
         if (updateDto.getEmail() != null) {
             instructor.setEmail(updateDto.getEmail());
-        }
-        if (updateDto.getPassword() != null) {
-            instructor.setPassword(updateDto.getPassword());
+        }        if (updateDto.getPassword() != null) {
+            instructor.setPassword(passwordEncoder.encode(updateDto.getPassword()));
         }
         if (updateDto.getFirstName() != null) {
             instructor.setFirstName(updateDto.getFirstName());

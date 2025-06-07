@@ -16,9 +16,7 @@ public interface InstructorRepository extends JpaRepository<Instructor, Integer>
      * - existsById(id), count()
      * - deleteById(id), delete(entity), deleteAll()
      * - flush(), saveAndFlush(entity)
-     */
-    
-    // Custom Query Methods
+     */    // Custom Query Methods
     Optional<Instructor> findByUsername(String username);
     Optional<Instructor> findByEmail(String email);
     boolean existsByUsername(String username);

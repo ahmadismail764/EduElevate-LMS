@@ -10,7 +10,7 @@ import lombok.AllArgsConstructor;
 public class UpdateStudentDto {
     private String username;
     private String email;
+    private String password;
     private String firstName;
     private String lastName;
-    // Note: Password updates should be handled separately for security reasons
 }

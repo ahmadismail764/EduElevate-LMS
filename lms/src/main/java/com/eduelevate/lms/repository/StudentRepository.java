@@ -25,10 +25,9 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
      * - deleteAllById(List<Integer> ids) - Delete multiple by IDs
      * 
      * COUNT/CHECK OPERATIONS:
-     * - count() - Count total students     * - existsById(Integer id) - Check if student exists
-     */
-      // Custom Query Methods
+     * - count() - Count total students     * - existsById(Integer id) - Check if student exists     */      // Custom Query Methods
     Optional<Student> findByEmail(String email);
+    Optional<Student> findByUsername(String username);
     boolean existsByEmail(String email);
     boolean existsByUsername(String username);
 }

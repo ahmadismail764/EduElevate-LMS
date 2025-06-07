@@ -5,6 +5,7 @@ import com.eduelevate.lms.dto.admin.CreateAdminDto;
 import com.eduelevate.lms.dto.admin.UpdateAdminDto;
 import com.eduelevate.lms.entity.Admin;
 import com.eduelevate.lms.repository.AdminRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,9 +15,11 @@ import java.util.stream.Collectors;
 public class AdminServiceImpl implements AdminService {
 
     private final AdminRepository adminRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public AdminServiceImpl(AdminRepository adminRepository) {
+    public AdminServiceImpl(AdminRepository adminRepository, PasswordEncoder passwordEncoder) {
         this.adminRepository = adminRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -44,12 +47,10 @@ public class AdminServiceImpl implements AdminService {
         // Check for duplicate username
         if (adminRepository.existsByUsername(createDto.getUsername())) {
             throw new RuntimeException("Admin with username " + createDto.getUsername() + " already exists");
-        }
-
-        Admin admin = new Admin();
+        }        Admin admin = new Admin();
         admin.setUsername(createDto.getUsername());
         admin.setEmail(createDto.getEmail());
-        admin.setPassword(createDto.getPassword()); // In production, hash this password
+        admin.setPassword(passwordEncoder.encode(createDto.getPassword()));
         admin.setFirstName(createDto.getFirstName());
         admin.setLastName(createDto.getLastName());
 
@@ -76,14 +77,15 @@ public class AdminServiceImpl implements AdminService {
                 throw new RuntimeException("Admin with username " + updateDto.getUsername() + " already exists");
             }
             admin.setUsername(updateDto.getUsername());
-        }
-
-        // Update other fields if provided
+        }        // Update other fields if provided
         if (updateDto.getFirstName() != null) {
             admin.setFirstName(updateDto.getFirstName());
         }
         if (updateDto.getLastName() != null) {
             admin.setLastName(updateDto.getLastName());
+        }
+        if (updateDto.getPassword() != null) {
+            admin.setPassword(passwordEncoder.encode(updateDto.getPassword()));
         }
 
         Admin updatedAdmin = adminRepository.save(admin);
