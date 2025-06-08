@@ -1,8 +1,6 @@
 package com.eduelevate.lms.service;
 
-import com.eduelevate.lms.dto.student.CreateStudentDto;
-import com.eduelevate.lms.dto.student.StudentResponseDto;
-import com.eduelevate.lms.dto.student.UpdateStudentDto;
+import com.eduelevate.lms.dto.student.*;
 import com.eduelevate.lms.entity.Student;
 import com.eduelevate.lms.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
