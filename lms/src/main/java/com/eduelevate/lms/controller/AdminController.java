@@ -1,6 +1,8 @@
 package com.eduelevate.lms.controller;
 import com.eduelevate.lms.dto.admin.*;
+import com.eduelevate.lms.security.SecurityUtils;
 import com.eduelevate.lms.service.AdminService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -13,14 +15,18 @@ public class AdminController {
     public AdminController(AdminService adminService) {
         this.adminService = adminService;
     }
-    
-    @GetMapping  // Tested and working
+      @GetMapping  // Protected: Only Admins can see all admins
     public List<AdminResponseDto> getAllAdmins() {
+        // Already protected by Spring Security @hasRole("ADMIN") - only admins reach here
         return adminService.getAllAdmins();
     }
     
-    @GetMapping("/{id}") // Tested working
+    @GetMapping("/{id}") // Protected: Admins can only access their own data
     public AdminResponseDto getAdminById(@PathVariable int id) {
+        // Check if admin can access this specific admin's data
+        if (!SecurityUtils.canAccessUserData(id, "ADMIN")) {
+            throw new RuntimeException("Access denied: You can only access your own data");
+        }
         return adminService.getAdminById(id);
     }
     
@@ -28,14 +34,22 @@ public class AdminController {
     public AdminResponseDto createAdmin(@RequestBody CreateAdminDto createDto) {
         return adminService.createAdmin(createDto);
     }
-    
-    @PutMapping("/{id}") // Tested and working
+      @PutMapping("/{id}") // Protected: Admins can only update their own data
     public AdminResponseDto updateAdmin(@PathVariable int id, @RequestBody UpdateAdminDto updateDto) {
+        // Check if admin can modify this specific admin's data
+        if (!SecurityUtils.canAccessUserData(id, "ADMIN")) {
+            throw new RuntimeException("Access denied: You can only update your own data");
+        }
         return adminService.updateAdmin(id, updateDto);
     }
     
-    @DeleteMapping("/{id}") // Tested and working
-    public void deleteAdmin(@PathVariable int id) {
+    @DeleteMapping("/{id}") // Protected: Admins can only delete their own data
+    public ResponseEntity<Void> deleteAdmin(@PathVariable int id) {
+        // Check if admin can delete this specific admin's data
+        if (!SecurityUtils.canAccessUserData(id, "ADMIN")) {
+            throw new RuntimeException("Access denied: You can only delete your own data");
+        }
         adminService.deleteAdmin(id);
+        return ResponseEntity.noContent().build();
     }
 }

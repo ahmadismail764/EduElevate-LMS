@@ -26,14 +26,17 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         try {
-            String jwt = parseJwt(request);
-            if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
+            String jwt = parseJwt(request);            if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
                 String username = jwtUtils.getUsernameFromJwtToken(jwt);
                 String role = jwtUtils.getRoleFromJwtToken(jwt);
+                Integer userId = jwtUtils.getUserIdFromJwtToken(jwt);
+
+                // Create a custom principal that includes both username and userId
+                UserPrincipal userPrincipal = new UserPrincipal(username, userId, role);
 
                 UsernamePasswordAuthenticationToken authentication = 
                     new UsernamePasswordAuthenticationToken(
-                        username, 
+                        userPrincipal, 
                         null, 
                         Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role))
                     );

@@ -149,22 +149,31 @@ public class GlobalExceptionHandler {
         errorResponse.put("path", request.getDescription(false).replace("uri=", ""));
         
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler(RuntimeException.class)
+    }    @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<Map<String, Object>> handleRuntimeException(
             RuntimeException ex, WebRequest request) {
         
         Map<String, Object> errorResponse = new HashMap<>();
         errorResponse.put("timestamp", LocalDateTime.now());
-        errorResponse.put("status", HttpStatus.NOT_FOUND.value());
-        errorResponse.put("error", "Not Found");
+        
+        // Check if it's an access denied error
+        String message = ex.getMessage();
+        if (message != null && message.contains("Access denied")) {
+            errorResponse.put("status", HttpStatus.FORBIDDEN.value());
+            errorResponse.put("error", "Forbidden");
+            errorResponse.put("message", message);
+            errorResponse.put("path", request.getDescription(false).replace("uri=", ""));
+            return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+        }
         
         // Check if it's a "not found" type error
-        String message = ex.getMessage();
         if (message != null && (message.contains("not found") || message.contains("does not exist"))) {
+            errorResponse.put("status", HttpStatus.NOT_FOUND.value());
+            errorResponse.put("error", "Not Found");
             errorResponse.put("message", message);
         } else {
+            errorResponse.put("status", HttpStatus.NOT_FOUND.value());
+            errorResponse.put("error", "Not Found");
             errorResponse.put("message", "Resource not found");
         }
         

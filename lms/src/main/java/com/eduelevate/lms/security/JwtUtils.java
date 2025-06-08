@@ -19,12 +19,11 @@ public class JwtUtils {
 
     private SecretKey getSigningKey() {
         return Keys.hmacShaKeyFor(jwtSecret.getBytes());
-    }
-
-    public String generateJwtToken(String username, String role) {
+    }    public String generateJwtToken(String username, String role, Integer userId) {
         return Jwts.builder()
                 .setSubject(username)
                 .claim("role", role)
+                .claim("userId", userId)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
@@ -38,15 +37,22 @@ public class JwtUtils {
                 .parseClaimsJws(token)
                 .getBody()
                 .getSubject();
-    }
-
-    public String getRoleFromJwtToken(String token) {
+    }    public String getRoleFromJwtToken(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(getSigningKey())
                 .build()
                 .parseClaimsJws(token)
                 .getBody()
                 .get("role", String.class);
+    }
+
+    public Integer getUserIdFromJwtToken(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(getSigningKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .get("userId", Integer.class);
     }
 
     public boolean validateJwtToken(String authToken) {

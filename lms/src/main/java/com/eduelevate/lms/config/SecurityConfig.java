@@ -16,7 +16,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig {    @Autowired
+public class SecurityConfig {    
+    @Autowired
     private AuthTokenFilter authTokenFilter;
     
     @Autowired
@@ -25,7 +26,8 @@ public class SecurityConfig {    @Autowired
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }    @Bean
+    }    
+    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
             .csrf(csrf -> csrf.disable())
@@ -33,19 +35,16 @@ public class SecurityConfig {    @Autowired
             .exceptionHandling(ex -> ex.authenticationEntryPoint(authEntryPoint))
             .authorizeHttpRequests(authz -> authz
                 .requestMatchers("/api/auth/**").permitAll() // Allow authentication endpoints
-                
-                // Allow user registration (POST only) - no authentication needed
-                .requestMatchers(HttpMethod.POST, "/api/students").permitAll() // Allow student registration
+                  // Allow user registration (POST only) - no authentication needed
+                .requestMatchers(HttpMethod.POST, "/api/students").hasRole("ADMIN") // Only Admins can create students
                 .requestMatchers(HttpMethod.POST, "/api/admins").permitAll() // Allow admin registration  
-                .requestMatchers(HttpMethod.POST, "/api/instructors").permitAll() // Allow instructor registration
-                
-                // Protect other student endpoints (GET, PUT, DELETE)
-                .requestMatchers("/api/students/**").hasAnyRole("STUDENT", "ADMIN") // Students and Admins can access student endpoints
+                .requestMatchers(HttpMethod.POST, "/api/instructors").hasRole("ADMIN") // Only Admins can create instructors
+                  // Protect other student endpoints (GET, PUT, DELETE)
+                .requestMatchers("/api/students/**").hasAnyRole("STUDENT", "INSTRUCTOR", "ADMIN") // Students, Instructors, and Admins can access student endpoints
                 
                 // Protect admin endpoints (only Admins, except POST which is public above)
                 .requestMatchers("/api/admins/**").hasRole("ADMIN") // Only Admins can access admin endpoints
-                
-                // Protect instructor endpoints (Instructors and Admins, except POST which is public above)
+                  // Protect instructor endpoints (Only Admins can access instructor lists, individuals can access their own)
                 .requestMatchers("/api/instructors/**").hasAnyRole("INSTRUCTOR", "ADMIN") // Instructors and Admins can access instructor endpoints
                 
                 .anyRequest().authenticated() // All other requests need authentication
