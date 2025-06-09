@@ -42,6 +42,10 @@ CREATE TABLE
         password VARCHAR(255) NOT NULL,
         first_name VARCHAR(50) NOT NULL,
         last_name VARCHAR(50) NOT NULL,
+        phone_number VARCHAR(20),
+        address TEXT,
+        date_of_birth DATE,
+        enrollment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     );
@@ -55,19 +59,29 @@ CREATE TABLE
         password VARCHAR(255) NOT NULL,
         first_name VARCHAR(50) NOT NULL,
         last_name VARCHAR(50) NOT NULL,
+        phone_number VARCHAR(20),
+        address TEXT,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     );
 
--- Create instructor table (extends student)
+-- Create instructor table (independent entity, not extending student)
 CREATE TABLE
     instructor (
         instructor_id INT AUTO_INCREMENT PRIMARY KEY,
-        student_id INT UNIQUE NOT NULL,
+        username VARCHAR(50) UNIQUE NOT NULL,
+        email VARCHAR(100) UNIQUE NOT NULL,
+        password VARCHAR(255) NOT NULL,
+        first_name VARCHAR(50) NOT NULL,
+        last_name VARCHAR(50) NOT NULL,
+        phone_number VARCHAR(20),
+        address TEXT,
         department VARCHAR(100),
-        bio TEXT,
-        specialization VARCHAR(100),
-        FOREIGN KEY (student_id) REFERENCES student (student_id) ON DELETE CASCADE
+        expertise VARCHAR(200),
+        years_of_experience INT DEFAULT 0,
+        qualifications TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     );
 
 -- Create course table
@@ -225,7 +239,15 @@ CREATE TABLE
 -- Create indexes for better performance
 CREATE INDEX idx_student_email ON student (email);
 
+CREATE INDEX idx_student_username ON student (username);
+
 CREATE INDEX idx_admin_email ON admin (email);
+
+CREATE INDEX idx_admin_username ON admin (username);
+
+CREATE INDEX idx_instructor_email ON instructor (email);
+
+CREATE INDEX idx_instructor_username ON instructor (username);
 
 CREATE INDEX idx_course_instructor ON course (instructor_id);
 

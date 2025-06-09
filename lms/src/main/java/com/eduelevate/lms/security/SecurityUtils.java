@@ -39,6 +39,10 @@ public class SecurityUtils {
         return "INSTRUCTOR".equals(getCurrentUserRole());
     }
 
+    public static boolean hasRole(String role) {
+        return role.equals(getCurrentUserRole());
+    }
+
     public static boolean canAccessUserData(Integer requestedUserId, String requestedUserType) {
         UserPrincipal currentUser = getCurrentUser();
         String currentRole = currentUser.getRole();
@@ -56,9 +60,6 @@ public class SecurityUtils {
         if ("INSTRUCTOR".equals(currentRole) && "STUDENT".equals(requestedUserType)) {
             return true;
         }
-
-        // REMOVED: Instructors can NO LONGER access other instructors' data
-        // This was a privacy violation
 
         return false;
     }

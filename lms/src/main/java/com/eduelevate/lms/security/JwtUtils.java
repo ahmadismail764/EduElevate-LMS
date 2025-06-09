@@ -53,14 +53,14 @@ public class JwtUtils {
                 .parseClaimsJws(token)
                 .getBody()
                 .get("userId", Integer.class);
-    }
-
-    public boolean validateJwtToken(String authToken) {
+    }    public boolean validateJwtToken(String authToken) {
         try {
+            System.out.println("JwtUtils: Validating token: " + authToken.substring(0, Math.min(authToken.length(), 20)) + "...");
             Jwts.parserBuilder()
                 .setSigningKey(getSigningKey())
                 .build()
                 .parseClaimsJws(authToken);
+            System.out.println("JwtUtils: Token validation successful");
             return true;
         } catch (MalformedJwtException e) {
             System.err.println("Invalid JWT token: " + e.getMessage());
@@ -71,6 +71,7 @@ public class JwtUtils {
         } catch (IllegalArgumentException e) {
             System.err.println("JWT claims string is empty: " + e.getMessage());
         }
+        System.out.println("JwtUtils: Token validation failed");
         return false;
     }
 }
