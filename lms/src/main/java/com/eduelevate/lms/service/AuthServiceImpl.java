@@ -38,9 +38,8 @@ public class AuthServiceImpl implements AuthService {
     public JwtResponse authenticateUser(LoginRequest loginRequest) {
         String username = loginRequest.getUsername();
         String password = loginRequest.getPassword();
-        String userType = loginRequest.getUserType().toLowerCase();
-
-        switch (userType) {            case "student":
+        String userType = loginRequest.getUserType().toLowerCase();        switch (userType) {
+            case "student":
                 Optional<Student> student = studentRepository.findByUsername(username);
                 if (student.isPresent() && passwordEncoder.matches(password, student.get().getPassword())) {
                     String token = jwtUtils.generateJwtToken(username, "STUDENT", student.get().getStudentId());

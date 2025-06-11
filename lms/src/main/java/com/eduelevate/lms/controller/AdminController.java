@@ -1,7 +1,11 @@
 package com.eduelevate.lms.controller;
 import com.eduelevate.lms.dto.admin.*;
+import com.eduelevate.lms.dto.student.StudentResponseDto;
+import com.eduelevate.lms.dto.instructor.InstructorResponseDto;
 import com.eduelevate.lms.security.SecurityUtils;
 import com.eduelevate.lms.service.AdminService;
+import com.eduelevate.lms.service.StudentService;
+import com.eduelevate.lms.service.InstructorService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -11,11 +15,16 @@ import java.util.List;
 public class AdminController {
     
     private final AdminService adminService;
+    private final StudentService studentService;
+    private final InstructorService instructorService;
     
-    public AdminController(AdminService adminService) {
+    public AdminController(AdminService adminService, StudentService studentService, InstructorService instructorService) {
         this.adminService = adminService;
+        this.studentService = studentService;
+        this.instructorService = instructorService;
     }
-      @GetMapping  // Protected: Only Admins can see all admins
+
+    @GetMapping  // Protected: Only Admins can see all admins
     public List<AdminResponseDto> getAllAdmins() {
         // Already protected by Spring Security @hasRole("ADMIN") - only admins reach here
         return adminService.getAllAdmins();
@@ -51,5 +60,18 @@ public class AdminController {
         }
         adminService.deleteAdmin(id);
         return ResponseEntity.noContent().build();
+    }
+    
+    // Admin-specific endpoints for managing students and instructors
+    @GetMapping("/students")
+    public ResponseEntity<List<StudentResponseDto>> getAllStudentsAsAdmin() {
+        List<StudentResponseDto> students = studentService.getAllStudents();
+        return ResponseEntity.ok(students);
+    }
+    
+    @GetMapping("/instructors")
+    public ResponseEntity<List<InstructorResponseDto>> getAllInstructorsAsAdmin() {
+        List<InstructorResponseDto> instructors = instructorService.getAllInstructors();
+        return ResponseEntity.ok(instructors);
     }
 }

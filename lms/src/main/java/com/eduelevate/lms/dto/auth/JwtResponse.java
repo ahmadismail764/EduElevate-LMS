@@ -58,4 +58,13 @@ public class JwtResponse {
     public void setUserId(int userId) {
         this.userId = userId;
     }
+
+    // Alias for backward compatibility with tests
+    public String getUserType() {
+        return role;
+    }
+
+    public void setUserType(String userType) {
+        this.role = userType;
+    }
 }

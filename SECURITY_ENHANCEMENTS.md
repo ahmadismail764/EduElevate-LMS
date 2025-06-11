@@ -202,6 +202,87 @@ public class SecurityErrorResponse {
 
 ---
 
+## 🎯 **PHASE 7: ADMIN ROLE ENHANCEMENT**
+
+### **Priority: MEDIUM**
+
+### Admin Course Management Enhancement
+
+**Feature:** Allow admins to create courses on behalf of instructors with instructor selection
+
+**Current State:**
+
+- Only instructors can create courses (proper role separation)
+- Admins manage users and system oversight
+
+**Proposed Enhancement:**
+
+- Add admin course creation endpoint with instructor selection
+- Admin selects from available instructors when creating course
+- Maintain security: Course ownership remains with selected instructor
+
+### Implementation Plan
+
+1. **New Admin Course Creation Endpoint**
+
+   ```java
+   @PostMapping("/admin/courses")
+   @PreAuthorize("hasRole('ADMIN')")
+   public ResponseEntity<CourseResponseDto> createCourseAsAdmin(
+       @Valid @RequestBody AdminCourseCreateDto createDto) {
+       // Admin can create course for any instructor
+   }
+   ```
+
+2. **Admin Course Creation DTO**
+
+   ```java
+   public class AdminCourseCreateDto {
+       @NotBlank private String title;
+       @NotBlank private String description;
+       @Min(1) private Integer capacity;
+       @Min(1) private Integer durationWeeks;
+       @NotNull private Integer instructorId; // Admin selects from dropdown
+   }
+   ```
+
+3. **Instructor Selection API**
+
+   ```java
+   @GetMapping("/admin/instructors/available")
+   public ResponseEntity<List<InstructorSelectionDto>> getAvailableInstructors() {
+       // Returns simplified instructor list for admin selection
+   }
+   ```
+
+4. **Frontend Enhancement**
+   - Admin dashboard course creation form
+   - Dropdown/search for instructor selection
+   - Show instructor details (name, department, specialization)
+   - Validation that selected instructor exists and is active
+
+5. **Security Considerations**
+   - Validate instructor exists and is active
+   - Log admin course creation actions for audit
+   - Course ownership remains with selected instructor
+   - Instructor retains full control over their assigned course
+
+### Benefits
+
+- Admins can help instructors who need assistance with course setup
+- Streamlined course creation process for new instructors
+- Maintains proper role separation and security
+- Audit trail for administrative actions
+
+### Test Cases
+
+- Admin creates course for specific instructor
+- Admin cannot create course for non-existent instructor
+- Instructor maintains full control over admin-created course
+- Course appears in instructor's course list after admin creation
+
+---
+
 ## 🔧 **DEPENDENCIES TO ADD**
 
 ```xml

@@ -24,18 +24,15 @@ import java.util.Map;
 @Slf4j
 public class CourseController {
     
-    private final CourseService courseService;
-      @PostMapping
-    @PreAuthorize("hasRole('ADMIN') or hasRole('INSTRUCTOR')")
+    private final CourseService courseService;    @PostMapping
+    @PreAuthorize("hasRole('INSTRUCTOR')")
     public ResponseEntity<CourseResponseDto> createCourse(@Valid @RequestBody CourseCreateDto createDto) {
         log.info("Creating course: {}", createDto.getTitle());
         
-        // If instructor role, ensure they can only create courses for themselves
-        if (SecurityUtils.hasRole("INSTRUCTOR")) {
-            Integer currentUserId = SecurityUtils.getCurrentUserId();
-            if (!currentUserId.equals(createDto.getInstructorId())) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-            }
+        // Instructors can only create courses for themselves
+        Integer currentUserId = SecurityUtils.getCurrentUserId();
+        if (!currentUserId.equals(createDto.getInstructorId())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         
         CourseResponseDto response = courseService.createCourse(createDto);

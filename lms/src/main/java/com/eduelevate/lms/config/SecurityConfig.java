@@ -48,7 +48,11 @@ public class SecurityConfig {
                 .requestMatchers("/api/admins/**").hasRole("ADMIN") // Only Admins can access admin endpoints                // Protect instructor endpoints (Only Admins can access instructor lists, individuals can access their own)
                 .requestMatchers("/api/instructors/**").hasAnyRole("INSTRUCTOR", "ADMIN") // Instructors and Admins can access instructor endpoints
                 
-                // Course endpoints - secured by method-level annotations
+                // Public course browsing endpoints (no authentication required) - MUST come before protected rules
+                .requestMatchers(HttpMethod.GET, "/api/courses").permitAll() // Public course listing
+                .requestMatchers(HttpMethod.GET, "/api/courses/**").permitAll() // Public course details, search, etc.
+                
+                // Protected course management endpoints - secured by method-level annotations
                 .requestMatchers("/api/courses/**").hasAnyRole("STUDENT", "INSTRUCTOR", "ADMIN")
                 
                 .anyRequest().authenticated() // All other requests need authentication
