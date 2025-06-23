@@ -1,7 +1,6 @@
 // EduElevate LMS - Comprehensive API Testing Script
-// One-click testing - just run: node test-api.js
+// One-click testing - just run: node test-api.js ( with the server up ;) )
 
-const https = require("https");
 const http = require("http");
 
 const baseUrl = "http://localhost:8080/api";
